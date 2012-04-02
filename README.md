@@ -1,0 +1,1 @@
+This is a simple platformer/climber game.  Later on, this game will have multi-player LAN support and physics.
