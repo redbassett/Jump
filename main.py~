@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-
+import this
 from Game import *
 game = Game((800,600))
 game.loop()
