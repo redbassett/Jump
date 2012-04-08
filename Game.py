@@ -9,54 +9,36 @@ SOUTH =(0, 1)
 WEST = (-1, 0)
 
 class Game(object):
-    done = False
     
     def __init__(self, screenSize):
         pygame.init()
-        self.window = pygame.display.set_mode(screenSize)
-        self.display = pygame.display
-        self.display.set_caption('Jump')
-        self.screen = self.display.get_surface()
+        self.screen = pygame.display.set_mode(screenSize)
+        pygame.display.set_caption('Jump')
         self.spawn()
     
-    def keyEval(self, key):
-        if pygame.key.get_pressed()[pygame.K_UP]:
-            self.player.move(NORTH)
-        elif pygame.key.get_pressed()[pygame.K_RIGHT]:
-            self.player.move(EAST)
-        elif pygame.key.get_pressed()[pygame.K_DOWN]:
-            self.player.move(SOUTH)
-        elif pygame.key.get_pressed()[pygame.K_LEFT]:
-            self.player.move(WEST)
-    
-    def input(self, event):
-        if event.type == pygame.QUIT:
-            self.done = True
-        #elif event.type == pygame.KEYDOWN:
-            #self.keyEval(event.key)
-        #el
-
     
     def spawn(self):
-        self.player = Player((0,0))
+        self.player = Player((50,50))
     
     def loop(self):
-       while not self.done:
-           #input
-           if pygame.key.get_pressed()[pygame.K_UP]:
-               self.player.move(NORTH)
-           elif pygame.key.get_pressed()[pygame.K_RIGHT]:
-               self.player.move(EAST)
-           elif pygame.key.get_pressed()[pygame.K_DOWN]:
-               self.player.move(SOUTH)
-           elif pygame.key.get_pressed()[pygame.K_LEFT]:
-               self.player.move(WEST)
+        self.done = False
+        self.clock = pygame.time.Clock()
+        while not self.done:
+            dt = self.clock.tick(30)
 
-           #update
+            #input
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    self.done = True
+                elif event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+                    self.done = True
 
-           #draw
-           self.screen.fill((0,0,0))
-           self.player.draw(self.screen)
-           
-           #refresh
-           self.display.flip()
+            #update
+            self.player.update(dt)
+
+            #draw
+            self.screen.fill((0,0,0))
+            self.screen.blit(self.player.image, self.player.rect)
+             
+            #refresh
+            pygame.display.flip()
