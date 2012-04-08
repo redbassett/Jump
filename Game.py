@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import pygame
+from Player import *
 
 class Game(object):
     done = False
@@ -8,8 +9,10 @@ class Game(object):
     def __init__(self, screenSize):
         pygame.init()
         self.window = pygame.display.set_mode(screenSize)
-        pygame.display.set_caption('Jump')
-        self.screen = pygame.display.get_surface()
+        self.display = pygame.display
+        self.display.set_caption('Jump')
+        self.screen = self.display.get_surface()
+        self.player = Player()
     
     def input(self, event):
         if event.type == pygame.QUIT:
@@ -17,5 +20,15 @@ class Game(object):
     
     def loop(self):
        while not self.done:
-            for event in pygame.event.get():
+           #input
+           for event in pygame.event.get():
                 self.input(event)
+                
+           #update
+
+           #draw
+           self.screen.fill((0,0,0))
+           self.player.draw(self.screen)
+           
+           #refresh
+           self.display.flip()
