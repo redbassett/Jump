@@ -32,9 +32,6 @@ class Player(Sprite):
             dx = -PLAYER_SPEED * dt
         if keys[K_RIGHT]:
             dx = PLAYER_SPEED * dt
-        if keys[K_UP]:
-            dy = -PLAYER_SPEED * dt
-        if keys[K_DOWN]:
-            dy = PLAYER_SPEED * dt
-
+        dy = PLAYER_SPEED * dt
+            
         self.rect.move_ip(dx, dy)
