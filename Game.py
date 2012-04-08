@@ -1,19 +1,21 @@
 #!/usr/bin/env python
 
-from pygame.locals import *
-from overloading import overload
+import pygame
 
-class def Game(object):
+class Game(object):
+    done = False
+    
     def __init__(self, screenSize):
         pygame.init()
         self.window = pygame.display.set_mode(screenSize)
-        self.display.set_caption('Jump')
+        pygame.display.set_caption('Jump')
         self.screen = pygame.display.get_surface()
     
     def input(self, event):
-        if event.type == QUIT:
-            self.done = False
+        if event.type == pygame.QUIT:
+            self.done = True
     
     def loop(self):
-        while not done:
-            pass # Game loop here
+       while not self.done:
+            for event in pygame.event.get():
+                self.input(event)
