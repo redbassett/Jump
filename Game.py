@@ -18,7 +18,7 @@ class Game(object):
         self.deaths = 0
         
         self.screen = screen
-        self.level = Level()
+        self.level = Level('slicelevel')
         self.spawn()
         
         self.game_area = screen.subsurface((0, 40, screen.get_width(), screen.get_height() - 40))
