@@ -5,7 +5,7 @@ from pygame.sprite import Sprite, Group
 from Block import *
 from Lethal import Lethal
 
-LEVEL_SIZE = (800,600)
+LEVEL_SIZE = (10000,1000)
 
 #Thanks Alec!
 class Level(object):
@@ -29,16 +29,12 @@ class Level(object):
             Block((0,260)),
             Block((0,300)),
             Block((0,600)),
-            Block((20,600)),
+            Lethal((20,600)),
             Block((40,600)),
             Block((60,600)),
             Block((80,600)),
             Block((100,600)),
             Block((20,300))
-        )
-        
-        self.lethal = Group(
-            Lethal((20,600))
         )
         
         self.spawnPoint = (20,20)

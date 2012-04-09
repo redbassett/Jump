@@ -48,10 +48,13 @@ class Game(object):
 
             #update
             self.player.update(dt)
+            self.cam.update(self.player.rect)
 
             #draw
             self.screen.fill((0,0,0))
             self.screen.blit(self.player.image, self.player.rect)
+            self.cam.draw_background(self.game_area, self.level.background)
+            self.cam.draw_sprite(self.game_area, self.player)
 
             #refresh
             pygame.display.flip()

@@ -5,7 +5,7 @@ from pygame.sprite import Sprite, Group
 from Block import *
 from Lethal import Lethal
 
-LEVEL_SIZE = (800,600)
+LEVEL_SIZE = (10000,10000)
 
 #Thanks Alec!
 class Level(object):
