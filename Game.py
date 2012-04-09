@@ -1,7 +1,9 @@
 #!/usr/bin/env python
 
 import pygame
+from pygame.sprite import Group
 from Player import *
+from Block import *
 
 NORTH =(0, -1)
 EAST = (1, 0)
@@ -19,6 +21,8 @@ class Game(object):
     
     def spawn(self):
         self.player = Player((50,50))
+        self.blocks = Group()
+        self.blocks.add(Block((100,100)))
     
     def loop(self):
         self.done = False
@@ -35,10 +39,12 @@ class Game(object):
 
             #update
             self.player.update(dt)
+            self.blocks.update()
 
             #draw
             self.screen.fill((0,0,0))
             self.screen.blit(self.player.image, self.player.rect)
-             
+            self.blocks.draw(self.screen) 
+
             #refresh
             pygame.display.flip()
