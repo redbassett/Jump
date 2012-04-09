@@ -11,9 +11,9 @@ PLAYER_SPEED = 240
 JUMP_SPEED = 5000
 
 class Player(Sprite):
-    def __init__(self, (x,y), level, game, color = (255,255,255), (w,h) = (20,20)):
+    def __init__(self, level, game, color = (255,255,255), (w,h) = (20,20)):
         Sprite.__init__(self)
-        self.x, self.y  = (x,y)
+        self.x, self.y 
         
         self.image = pygame.Surface((w,h))
         self.rect = self.image.get_rect()
@@ -27,8 +27,8 @@ class Player(Sprite):
         self.inAir = False
         
         self.level = level
-        self.bounds = level.bounds
-        self.game = game
+        self.bounds = level.bound
+        self.game = games
 
     def update(self, dt):
         dt = dt / 1000.0

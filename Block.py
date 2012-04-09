@@ -15,3 +15,5 @@ class Block(Sprite):
             self.rect.topleft = x,y
             
             self.image.fill(color)
+	    
+	    self.lethal = False
