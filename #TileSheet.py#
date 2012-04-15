@@ -1,6 +1,0 @@
-#!/usr/bin/env python
-
-class TileSheet(object):
-    _map = {}
-    
-    def __init__(self, image, size

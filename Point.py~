@@ -1,6 +1,0 @@
-#!/usr/bin/env python
-
-"""
-A point is the most basic form of object in the game, representing a point in sapce (grid) in the world.
-class Point(object):
-    
