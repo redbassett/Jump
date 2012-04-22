@@ -4,6 +4,7 @@ from pygame import Rect, Surface
 from pygame.sprite import Sprite, Group
 from Block import *
 from Lethal import Lethal
+from win import *
 import os
 
 LEVEL_SIZE = (10000,10000)
@@ -15,6 +16,8 @@ class Level(object):
         
         self.blocks = Group()
         self.lethal = Group()
+        self.win = Group()
+
         self.loadData(name)
 
         self.spawnPoint = (20,20)
@@ -26,6 +29,7 @@ class Level(object):
         self.background.fill((0,0,0))
         self.blocks.draw(self.background)
         self.lethal.draw(self.background)
+        self.win.draw(self.background)
         
     def loadData(self, name):
         ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -45,3 +49,5 @@ class Level(object):
                     self.blocks.add(Block(loc))
                 elif c == '!':
                     self.lethal.add(Lethal(loc))
+                elif c == "^":
+                    self.win.add(Win(loc))

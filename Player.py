@@ -70,7 +70,10 @@ class Player(Sprite):
         if spritecollide(self, self.level.lethal, False):
             self.game.deaths += 1
             self.game.spawn()
-        
+
+        if spritecollide(self, self.level.win, True):
+            self.kill
+            print "You Win. Go home."
         
 
         #self.inAir = True
