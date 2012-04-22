@@ -16,4 +16,3 @@ class Block(Sprite):
             
             self.image.fill(color)
 	    
-	    self.lethal = False

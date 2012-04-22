@@ -24,7 +24,7 @@ class Game(object):
         self.game_area = screen.subsurface((0, 40, screen.get_width(), screen.get_height() - 40))
         self.cam = Camera(self.player, self.level.bounds, self.game_area.get_size())
         
-        # self.hud = screen.subsurface((0, 0, screen.get_width(), 40))
+        self.hud = screen.subsurface((0, 0, screen.get_width(), 40))
     
     def spawn(self):
         self.player = Player((self.level.spawnPoint), self.level, self)
@@ -45,14 +45,17 @@ class Game(object):
                     self.quit()
                 elif event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
                     self.quit()
+                elif event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
+                    self.player.jump()
 
             #update
             self.player.update(dt)
             self.cam.update(self.player.rect)
 
             #draw
-            self.screen.fill((0,0,0))
-            self.screen.blit(self.player.image, self.player.rect)
+            self.hud.fill((80, 80, 80))
+
+            self.game_area.fill((0,0,0))
             self.cam.draw_background(self.game_area, self.level.background)
             self.cam.draw_sprite(self.game_area, self.player)
 

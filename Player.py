@@ -2,13 +2,14 @@
 
 import pygame
 from pygame.locals import *
-from pygame.sprite import Sprite, Group
+from pygame.sprite import Sprite, Group, spritecollide
 """
 A player is a character in the game.  All players are human controlled.
 """
 
 PLAYER_SPEED = 200
 JUMP_SPEED = 500
+GRAVITY = 700
 
 class Player(Sprite):
     def __init__(self, (x,y), level, game, color = (255,255,255), (w,h) = (20,20)):
@@ -24,60 +25,82 @@ class Player(Sprite):
         self.vx = 0
         self.vy = 0
         
-        self.inAir = False
+        self.inAir = True
+     #   self.wallJump = False
         
         self.level = level
         self.bounds = level.bounds
         self.game = game
 
+    def jump(self):
+        if not self.inAir:
+            self.inAir = True
+            self.vy = -JUMP_SPEED
+
     def update(self, dt):
-        dt = dt / 750.0
+        dt = dt / 1000.0
 
         keys = pygame.key.get_pressed()
-        dx, dy = 0,0
+        self.vx = 0
         if keys[K_LEFT]:
-            dx = -PLAYER_SPEED * dt
+            self.vx = -PLAYER_SPEED
+        
         if keys[K_RIGHT]:
-            dx = PLAYER_SPEED * dt
-        if keys[K_SPACE] and not self.inAir:
-            dy = -JUMP_SPEED * dt
-        if keys[K_SPACE] and dy < (JUMP_SPEED * 4):
-            dy += -JUMP_SPEED * dt
-        else:
-            dy = PLAYER_SPEED * (0.75 * dt)
+            self.vx = PLAYER_SPEED
+        
+        if keys[K_RIGHT]:
+            self.vx = PLAYER_SPEED
+
+
+        
+        dx = self.vx * dt
+        dy = self.vy * dt
             
-        #self.rect.move_ip(dx, dy)
         
         # Again from Alec
-        self.inAir = True
+        #if self.inAir:
+        self.vy += GRAVITY * dt
 
         prev_rect = self.rect
         self.rect = self.rect.move(dx,dy)
         self.rect.clamp_ip(self.bounds)
+
+        #lethal touches
+        # Takes false because lethal blocks need to be there.
+        if spritecollide(self, self.level.lethal, False):
+            self.game.deaths += 1
+            self.game.spawn()
         
-        for sprite in self.touches(self.level.blocks):
-            if not sprite.lethal:
-                rect = sprite.rect
+        
+
+        #self.inAir = True
+        for sprite in spritecollide(self, self.level.blocks, False):
+            rect = sprite.rect
                 
-                if self.rect.left <= rect.right and prev_rect.left >= rect.right:
-                    self.rect.left = rect.right
-                if self.rect.right >= rect.right and prev_rect.right <= rect.left:
-                    self.rect.right = rect.left
-                if self.rect.top <= rect.bottom and prev_rect.top >= rect.bottom:
-                    self.rect.top = rect.bottom
-                if self.rect.bottom >= rect.top and prev_rect.bottom <= rect.top:
-                    self.dy = 0
-                    self.rect.bottom = rect.top
-                    self.inAir = False
-            else:
-                self.game.deaths += 1
-                self.game.spawn()
-    
-    # Using Alec's wonderful collision math
-    def touches(self, group):
-        touching = Group()
-        coll = self.rect.inflate(1,1)
-        for sprite in group:
-            if coll.colliderect(sprite.rect):
-                touching.add(sprite)
-        return touching
+              # walls
+            if self.rect.left < rect.right and prev_rect.left >= rect.right:
+                self.rect.left = rect.right
+              #  self.wallJump = True
+           
+            elif self.rect.right >= rect.left and prev_rect.right <= rect.left:
+                self.rect.right = rect.left
+           #     self.wallJump = True
+           # else:
+            #    self.wallJump = False
+
+            
+                    #ceiling
+            if self.rect.top <= rect.bottom and \
+                    prev_rect.top >= rect.bottom and \
+                    self.rect.colliderect(rect):
+                self.vy /= 2.0 #on hitting ceiling, dont need to be stuck and finish arc.
+                self.rect.top = rect.bottom
+                    
+                    #landing
+            if self.rect.bottom >= rect.top and \
+                    prev_rect.bottom <= rect.top and \
+                    self.rect.colliderect(rect):
+                self.vy = 0
+                self.rect.bottom = rect.top
+                self.inAir = False
+         

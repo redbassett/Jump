@@ -14,6 +14,7 @@ class Level(object):
         self.bounds = Rect((0,0,), LEVEL_SIZE)
         
         self.blocks = Group()
+        self.lethal = Group()
         self.loadData(name)
 
         self.spawnPoint = (20,20)
@@ -24,6 +25,7 @@ class Level(object):
         self.background = Surface(self.bounds.size)
         self.background.fill((0,0,0))
         self.blocks.draw(self.background)
+        self.lethal.draw(self.background)
         
     def loadData(self, name):
         ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -35,14 +37,11 @@ class Level(object):
 
         width = 20
         height = 20
-        rowNum = 0
-        for row in data:
-            cNum = 0
-            for c in row:
-                loc = (cNum*width,rowNum*height)
+        for y, row in enumerate(data):
+            for x,c in enumerate(row):
+                loc = (x*width, y*height)
+                
                 if c == '.':
                     self.blocks.add(Block(loc))
                 elif c == '!':
-                    self.blocks.add(Lethal(loc))
-                cNum += 1
-            rowNum += 1
+                    self.lethal.add(Lethal(loc))
