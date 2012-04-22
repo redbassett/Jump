@@ -7,8 +7,8 @@ from pygame.sprite import Sprite, Group
 A player is a character in the game.  All players are human controlled.
 """
 
-PLAYER_SPEED = 240
-JUMP_SPEED = 5000
+PLAYER_SPEED = 200
+JUMP_SPEED = 500
 
 class Player(Sprite):
     def __init__(self, (x,y), level, game, color = (255,255,255), (w,h) = (20,20)):
@@ -31,7 +31,7 @@ class Player(Sprite):
         self.game = game
 
     def update(self, dt):
-        dt = dt / 1000.0
+        dt = dt / 750.0
 
         keys = pygame.key.get_pressed()
         dx, dy = 0,0
@@ -41,8 +41,10 @@ class Player(Sprite):
             dx = PLAYER_SPEED * dt
         if keys[K_SPACE] and not self.inAir:
             dy = -JUMP_SPEED * dt
+        if keys[K_SPACE] and dy < (JUMP_SPEED * 4):
+            dy += -JUMP_SPEED * dt
         else:
-            dy = PLAYER_SPEED * dt
+            dy = PLAYER_SPEED * (0.75 * dt)
             
         #self.rect.move_ip(dx, dy)
         
