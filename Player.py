@@ -12,8 +12,10 @@ JUMP_SPEED = 500
 GRAVITY = 700
 
 class Player(Sprite):
-    def __init__(self, (x,y), level, game, color = (255,255,255), (w,h) = (20,20)):
+    def __init__(self, (x,y), level, game, id, keys = (K_LEFT, K_RIGHT), color = (255,255,255), (w,h) = (20,20)):
         Sprite.__init__(self)
+        self.id = id
+        self.keys = keys
         self.x, self.y  = (x,y)
         
         self.image = pygame.Surface((w,h))
@@ -42,16 +44,11 @@ class Player(Sprite):
 
         keys = pygame.key.get_pressed()
         self.vx = 0
-        if keys[K_LEFT]:
+        if keys[self.keys[0]]:
             self.vx = -PLAYER_SPEED
         
-        if keys[K_RIGHT]:
+        if keys[self.keys[1]]:
             self.vx = PLAYER_SPEED
-        
-        if keys[K_RIGHT]:
-            self.vx = PLAYER_SPEED
-
-
         
         dx = self.vx * dt
         dy = self.vy * dt
@@ -69,7 +66,7 @@ class Player(Sprite):
         # Takes false because lethal blocks need to be there.
         if spritecollide(self, self.level.lethal, False):
             self.game.deaths += 1
-            self.game.spawn()
+            self.game.spawn(self.id)
         
         
 

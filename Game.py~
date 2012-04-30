@@ -18,17 +18,24 @@ class Game(object):
         self.deaths = 0
         
         self.screen = screen
-        self.level = Level()
-        self.spawn()
+        self.level = Level('testclip')
+        self.players = [None, None]
+        self.spawn(0)
+        self.spawn(1)
         
         self.game_area = screen.subsurface((0, 40, screen.get_width(), screen.get_height() - 40))
-        self.cam = Camera(self.player, self.level.bounds, self.game_area.get_size())
+        self.cam = Camera(self.players[0], self.level.bounds, self.game_area.get_size())
         
-        # self.hud = screen.subsurface((0, 0, screen.get_width(), 40))
+        self.hud = screen.subsurface((0, 0, screen.get_width(), 40))
     
-    def spawn(self):
-        self.player = Player((self.level.spawnPoint), self.level, self)
-        print self.deaths
+    def spawn(self, index):
+        if index == 0:
+            color = (255, 255, 255)
+            keys = (K_LEFT, K_RIGHT)
+        else:
+            color = (0, 0, 255)
+            keys = (K_a, K_d)
+        self.players[index] = Player((self.level.spawnPoint), self.level, self, index, keys, color)
             
     def quit(self):
         self.done = True
@@ -45,16 +52,26 @@ class Game(object):
                     self.quit()
                 elif event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
                     self.quit()
+                elif event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
+                    self.players[0].jump()
+                elif event.type == pygame.KEYDOWN and event.key == pygame.K_s:
+                    self.players[1].jump()
 
             #update
-            self.player.update(dt)
-            self.cam.update(self.player.rect)
+            for player in self.players:
+                player.update(dt)
+            #self.player.update(dt)
+                self.cam.update(player.rect)
 
             #draw
-            self.screen.fill((0,0,0))
-            self.screen.blit(self.player.image, self.player.rect)
+            self.hud.fill((80, 80, 80))
+
+            self.game_area.fill((0,0,0))
             self.cam.draw_background(self.game_area, self.level.background)
-            self.cam.draw_sprite(self.game_area, self.player)
+            for player in self.players:
+                self.cam.draw_sprite(self.game_area, player)
 
             #refresh
             pygame.display.flip()
+        if winner > -1:
+            print 'Player #',(winner+1),' wins.'
