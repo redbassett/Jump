@@ -17,18 +17,21 @@ class Game(object):
     def __init__(self, screen):
         self.deaths = 0
         
+        
         self.screen = screen
-        self.level = Level('testclip')
+        self.level = Level('reallevel')
         self.spawn()
         
         self.game_area = screen.subsurface((0, 40, screen.get_width(), screen.get_height() - 40))
         self.cam = Camera(self.player, self.level.bounds, self.game_area.get_size())
         
         self.hud = screen.subsurface((0, 0, screen.get_width(), 40))
-    
+        self.deathtext = pygame.font.Font(None, 20)
+
+
     def spawn(self):
         self.player = Player((self.level.spawnPoint), self.level, self)
-        print self.deaths
+        
             
     def quit(self):
         self.done = True
@@ -54,6 +57,9 @@ class Game(object):
 
             #draw
             self.hud.fill((80, 80, 80))
+            text = self.deathtext.render("deaths: " + str(self.deaths), True, (0, 255, 0)) 
+        
+            self.hud.blit(text, (0, 0))
 
             self.game_area.fill((0,0,0))
             self.cam.draw_background(self.game_area, self.level.background)
