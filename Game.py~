@@ -17,9 +17,11 @@ class Game(object):
     def __init__(self, screen):
         self.deaths = 0
         
+        
         self.screen = screen
         self.level = Level('testclip')
         self.players = [None, None]
+        self.deaths = [0, 0]
         self.spawn(0)
         self.spawn(1)
         
@@ -36,9 +38,15 @@ class Game(object):
             color = (0, 0, 255)
             keys = (K_a, K_d)
         self.players[index] = Player((self.level.spawnPoint), self.level, self, index, keys, color)
+        self.deathtext = pygame.font.Font(None, 20)
+
             
     def quit(self):
         self.done = True
+        
+    def win(self, id):
+        self.quit()
+        print 'Player #',(id+1),' wins.'
     
     def loop(self):
         self.done = False
@@ -65,6 +73,9 @@ class Game(object):
 
             #draw
             self.hud.fill((80, 80, 80))
+            text = self.deathtext.render("Player #1 deaths: " + str(self.deaths[0]) + ' - Player #2 deaths: '+str(self.deaths[1]), True, (0, 255, 0)) 
+        
+            self.hud.blit(text, (0, 0))
 
             self.game_area.fill((0,0,0))
             self.cam.draw_background(self.game_area, self.level.background)
@@ -73,5 +84,5 @@ class Game(object):
 
             #refresh
             pygame.display.flip()
-        if winner > -1:
-            print 'Player #',(winner+1),' wins.'
+        if self.winner > -1:
+            print 'Player #',(self.winner+1),' wins.'

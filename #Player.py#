@@ -65,11 +65,12 @@ class Player(Sprite):
         #lethal touches
         # Takes false because lethal blocks need to be there.
         if spritecollide(self, self.level.lethal, False):
-            self.game.deaths[self.id] += 1
+
             self.game.spawn(self.id)
         
         if spritecollide(self, self.level.win, True):
-            self.game.win(self.id)
+            self.game.quit()
+            print "You Win. Go home."
         
 
         #self.inAir = True
